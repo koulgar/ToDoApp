@@ -1,2 +1,5 @@
+spring:
+  application:
+    name: To Do App
 server:
   port: 3169

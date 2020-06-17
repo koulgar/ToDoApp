@@ -10,7 +10,7 @@ import org.springframework.data.couchbase.core.mapping.Field;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document
@@ -22,7 +22,6 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
-    @Field
     public String id;
 
     @Field
@@ -32,11 +31,8 @@ public class User {
     public String password;
 
     @Field
-    public String token;
-
-    @Field
     public List<Note> notes;
 
     @Field
-    public Date createdDateTime;
+    public LocalDateTime createdDateTime;
 }

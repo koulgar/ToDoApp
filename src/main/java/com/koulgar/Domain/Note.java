@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Document
 @Data
@@ -20,9 +20,9 @@ public class Note {
     public String item;
 
     @Field
-    public Date createdDateTime;
+    public LocalDateTime createdDateTime;
 
     @Field
-    public Date updatedDateTime;
+    public LocalDateTime updatedDateTime;
 
 }
