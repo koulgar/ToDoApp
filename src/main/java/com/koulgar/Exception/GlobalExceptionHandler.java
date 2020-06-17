@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @RestControllerAdvice
@@ -15,7 +16,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(com.couchbase.client.core.error.UserNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
                 "UserNotFoundException",
-                System.currentTimeMillis(),
+                LocalDateTime.now(),
                 Collections.singletonList(exception.getMessage())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(PasswordDoesNotMatchException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
                 "PasswordDoesNotMatchException",
-                System.currentTimeMillis(),
+                LocalDateTime.now(),
                 Collections.singletonList(exception.getMessage())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

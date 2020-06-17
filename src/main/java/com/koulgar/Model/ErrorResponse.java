@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,6 @@ import java.util.List;
 public class ErrorResponse {
 
     private String exception;
-    private Long timestamp;
+    private LocalDateTime timestamp;
     private List<String> errors = new ArrayList<>();
 }
