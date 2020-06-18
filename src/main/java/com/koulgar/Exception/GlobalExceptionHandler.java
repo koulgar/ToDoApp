@@ -12,8 +12,8 @@ import java.util.Collections;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(com.couchbase.client.core.error.UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handle(com.couchbase.client.core.error.UserNotFoundException exception) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handle(UserNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
                 "UserNotFoundException",
                 LocalDateTime.now(),
