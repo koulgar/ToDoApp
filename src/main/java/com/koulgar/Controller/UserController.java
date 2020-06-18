@@ -4,7 +4,6 @@ import com.koulgar.Model.UserDto;
 import com.koulgar.Model.UserRegisterRequestModel;
 import com.koulgar.Service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("users")
 public class UserController {
 
-    @Autowired
     private final UserService userService;
 
     @GetMapping("/{userId}")
@@ -35,7 +35,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveUser(@RequestBody UserRegisterRequestModel userRegisterRequestModel) {
+    public void saveUser(@Valid @RequestBody UserRegisterRequestModel userRegisterRequestModel) {
         /*
         TODO
          change endpoint to register

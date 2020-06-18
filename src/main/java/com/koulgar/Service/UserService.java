@@ -9,7 +9,6 @@ import com.koulgar.Model.UserDto;
 import com.koulgar.Model.UserRegisterRequestModel;
 import com.koulgar.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -18,13 +17,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
-
-    @Autowired
     private final GetUserResponseConverter getUserResponseConverter;
-
-    @Autowired
     private final RegisterUserConverter registerUserConverter;
 
     public UserDto getUserByUserId(String userId) {
@@ -37,7 +31,7 @@ public class UserService {
     }
 
     public void saveUser(UserRegisterRequestModel userRegisterModel) {
-        if (!Objects.equals(userRegisterModel.password, userRegisterModel.getPasswordConfirm())) {
+        if (!Objects.equals(userRegisterModel.getPassword(), userRegisterModel.getPasswordConfirm())) {
             throw new PasswordDoesNotMatchException("Şifre eşleşmiyor.");
         }
         User userToRegister = registerUserConverter.convert(userRegisterModel);
