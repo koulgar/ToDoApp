@@ -16,8 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class UserDto {
-    public String username;
-    public List<Note> notes;
-    public LocalDateTime createdDateTime;
+    private String id;
+    private String username;
+    private List<Note> notes;
+    private LocalDateTime createdDateTime;
 }
 

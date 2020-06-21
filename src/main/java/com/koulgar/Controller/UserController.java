@@ -1,12 +1,11 @@
 package com.koulgar.Controller;
 
+import com.koulgar.Model.UserLoginRequest;
 import com.koulgar.Model.UserDto;
-import com.koulgar.Model.UserRegisterRequestModel;
+import com.koulgar.Model.UserRegisterRequest;
 import com.koulgar.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,29 +16,20 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("user")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{userId}")
+    @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserByUserId(@PathVariable String userId) {
-        /*
-        TODO
-         change endpoint to login if successful return userId
-         use it as verification when getting notes
-         */
-        return userService.getUserByUserId(userId);
+    public UserDto userLogin(@Valid @RequestBody UserLoginRequest userLoginRequest) {
+        return userService.userLogin(userLoginRequest);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveUser(@Valid @RequestBody UserRegisterRequestModel userRegisterRequestModel) {
-        /*
-        TODO
-         change endpoint to register
-         */
-        userService.saveUser(userRegisterRequestModel);
+    public void userRegister(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        userService.register(userRegisterRequest);
     }
 }

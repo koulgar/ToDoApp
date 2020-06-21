@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisterRequestModel {
+public class UserRegisterRequest {
 
     @Size(min=2, max = 15, message = "user.username.length.not.valid")
     @NotBlank(message = "user.username.not.null")

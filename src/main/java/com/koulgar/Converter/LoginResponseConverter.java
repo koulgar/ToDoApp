@@ -5,13 +5,15 @@ import com.koulgar.Model.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GetUserResponseConverter {
+public class LoginResponseConverter {
 
     public UserDto convert(User user) {
         return UserDto.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .notes(user.getNotes())
                 .createdDateTime(user.getCreatedDateTime())
                 .build();
     }
+
 }

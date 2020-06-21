@@ -23,6 +23,16 @@ public class GlobalExceptionHandler {
     private final MessageSource messageSource;
     private static final Locale TR = new Locale("tr");
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handle(UserAlreadyExistsException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "UserNotFoundException",
+                LocalDateTime.now(),
+                Collections.singletonList(exception.getMessage())
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handle(UserNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
