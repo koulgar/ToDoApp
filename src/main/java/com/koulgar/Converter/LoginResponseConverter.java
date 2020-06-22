@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginResponseConverter {
 
-    public UserDto convert(User user) {
+        public UserDto convert(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())

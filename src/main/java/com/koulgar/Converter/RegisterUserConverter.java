@@ -2,9 +2,8 @@ package com.koulgar.Converter;
 
 import com.koulgar.Domain.User;
 import com.koulgar.Model.UserRegisterRequest;
+import com.koulgar.Utils.Clock;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class RegisterUserConverter {
@@ -14,7 +13,8 @@ public class RegisterUserConverter {
                 .username(userRegisterModel.getUsername())
                 .password(userRegisterModel.getPassword())
                 .notes(null)
-                .createdDateTime(LocalDateTime.now())
+                .createdDateTime(Clock.now())
                 .build();
     }
+
 }
