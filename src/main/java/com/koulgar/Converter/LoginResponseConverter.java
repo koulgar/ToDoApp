@@ -1,7 +1,7 @@
 package com.koulgar.Converter;
 
 import com.koulgar.Domain.User;
-import com.koulgar.Model.UserDto;
+import com.koulgar.Model.User.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component

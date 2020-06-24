@@ -1,6 +1,5 @@
-package com.koulgar.Model;
+package com.koulgar.Model.Note;
 
-import com.koulgar.Domain.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,17 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class NoteAddResponse {
     private String id;
-    private String username;
-    private List<Note> notes;
+    private String content;
+    private Boolean isCompleted;
     private LocalDateTime createdDateTime;
+    private LocalDateTime updatedDateTime;
 }
-

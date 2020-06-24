@@ -22,17 +22,17 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
-    public String id;
+    private String id;
 
     @Field
-    public String username;
+    private String username;
 
     @Field
-    public String password;
+    private String password;
 
     @Field
-    public List<Note> notes;
+    private List<Note> notes;
 
     @Field
-    public LocalDateTime createdDateTime;
+    private LocalDateTime createdDateTime;
 }

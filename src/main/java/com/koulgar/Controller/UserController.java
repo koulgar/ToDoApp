@@ -1,8 +1,8 @@
 package com.koulgar.Controller;
 
-import com.koulgar.Model.UserLoginRequest;
-import com.koulgar.Model.UserDto;
-import com.koulgar.Model.UserRegisterRequest;
+import com.koulgar.Model.User.UserLoginRequest;
+import com.koulgar.Model.User.UserDto;
+import com.koulgar.Model.User.UserRegisterRequest;
 import com.koulgar.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

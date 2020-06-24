@@ -1,4 +1,4 @@
-package com.koulgar.Model;
+package com.koulgar.Model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

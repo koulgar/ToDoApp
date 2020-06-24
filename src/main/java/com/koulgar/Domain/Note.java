@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
@@ -16,13 +17,19 @@ import java.time.LocalDateTime;
 @Builder
 public class Note {
 
-    @Field
-    public String item;
+    @Id
+    private String id;
 
     @Field
-    public LocalDateTime createdDateTime;
+    private String item;
 
     @Field
-    public LocalDateTime updatedDateTime;
+    private Boolean isCompleted;
+
+    @Field
+    private LocalDateTime createdDateTime;
+
+    @Field
+    private LocalDateTime updatedDateTime;
 
 }

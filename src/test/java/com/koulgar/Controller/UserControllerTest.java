@@ -2,9 +2,9 @@ package com.koulgar.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koulgar.Config.MessageSourceTestConfiguration;
-import com.koulgar.Model.UserLoginRequest;
-import com.koulgar.Model.UserDto;
-import com.koulgar.Model.UserRegisterRequest;
+import com.koulgar.Model.User.UserLoginRequest;
+import com.koulgar.Model.User.UserDto;
+import com.koulgar.Model.User.UserRegisterRequest;
 import com.koulgar.Service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
 package com.koulgar.Converter;
 
 import com.koulgar.Domain.User;
-import com.koulgar.Model.UserRegisterRequest;
+import com.koulgar.Model.User.UserRegisterRequest;
 import com.koulgar.Utils.Clock;
 import org.springframework.stereotype.Component;
 
