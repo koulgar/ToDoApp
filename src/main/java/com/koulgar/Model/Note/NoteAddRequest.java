@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class NoteAddRequest {
     @NotBlank(message = "user.id.not.null")
     private String userId;
 
+    @Size(max = 150, message = "note.content.lenght.not.valid")
     @NotBlank(message = "note.not.null")
     private String content;
 

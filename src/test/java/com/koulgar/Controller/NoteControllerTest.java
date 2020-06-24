@@ -77,16 +77,16 @@ public class NoteControllerTest {
         assertThat(capturedRequest).isEqualToComparingFieldByField(noteAddRequest);
 
         response.andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id").value("123123123123"))
-            .andExpect(jsonPath("$.content").value("Note item"))
-            .andExpect(jsonPath("$.isCompleted").value(false))
-            .andExpect(jsonPath("$.createdDateTime").value(now))
-            .andExpect(jsonPath("$.updatedDateTime").value(now));
+                .andExpect(jsonPath("$.id").value("123123123123"))
+                .andExpect(jsonPath("$.content").value("Note item"))
+                .andExpect(jsonPath("$.isCompleted").value(false))
+                .andExpect(jsonPath("$.createdDateTime").value(now))
+                .andExpect(jsonPath("$.updatedDateTime").value(now));
         Clock.unfreeze();
     }
 
     @Test
-    public void it_should_throw_exception_when_register_credentials_are_wrong() throws Exception {
+    public void it_should_throw_exception_when_adding_note_empty() throws Exception {
         NoteAddRequest noteAddRequest = NoteAddRequest.builder()
                 .content("")
                 .userId("")
@@ -104,7 +104,32 @@ public class NoteControllerTest {
                 .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
                 .andExpect(jsonPath("$.errors", containsInAnyOrder(
                         "Kullanici idsi bos olamaz.",
-                                "Not icerigi bos olamaz.")))
+                        "Not icerigi bos olamaz.")))
+                .andExpect(jsonPath("$.timestamp", notNullValue()));
+    }
+
+    @Test
+    public void it_should_throw_exception_when_adding_note_max_lenght_not_valid() throws Exception {
+        NoteAddRequest noteAddRequest = NoteAddRequest.builder()
+                .content("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
+                        "enean commodo ligula eget dolor. " +
+                        "Aenean massa. Cum sociis natoque penatibus et magnis dis po.")
+                .userId("")
+                .build();
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post("/notes/add-note")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(noteAddRequest)))
+                .andExpect(status().isBadRequest());
+
+        //then
+        verifyNoInteractions(noteService);
+        resultActions
+                .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
+                .andExpect(jsonPath("$.errors", containsInAnyOrder(
+                        "Kullanici idsi bos olamaz.",
+                        "Not uzunlugu 150 karakteri asamaz.")))
                 .andExpect(jsonPath("$.timestamp", notNullValue()));
     }
 }
