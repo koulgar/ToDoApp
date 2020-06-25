@@ -26,7 +26,6 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-
 @RunWith(SpringRunner.class)
 public class UserServiceTest {
 

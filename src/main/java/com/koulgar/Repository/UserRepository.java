@@ -12,4 +12,6 @@ public interface UserRepository extends CouchbaseRepository<User, String> {
     Optional<User> findByUsernameAndPassword(String username, String password);
 
     Optional<User> findByUsername(String username);
+
+    Optional<User> getUserById(String userId);
 }

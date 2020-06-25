@@ -2,34 +2,21 @@ package com.koulgar.Domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.Field;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Document
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Note {
-
-    @Id
     private String id;
-
-    @Field
-    private String item;
-
-    @Field
+    private String content;
     private Boolean isCompleted;
-
-    @Field
     private LocalDateTime createdDateTime;
-
-    @Field
     private LocalDateTime updatedDateTime;
-
 }

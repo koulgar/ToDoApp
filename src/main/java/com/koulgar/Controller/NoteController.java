@@ -1,7 +1,7 @@
 package com.koulgar.Controller;
 
 import com.koulgar.Model.Note.NoteAddRequest;
-import com.koulgar.Model.Note.NoteAddResponse;
+import com.koulgar.Domain.Note;
 import com.koulgar.Service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class NoteController {
 
     @PostMapping("/add-note")
     @ResponseStatus(HttpStatus.CREATED)
-    public NoteAddResponse addNote(@Valid @RequestBody NoteAddRequest noteAddRequest) {
+    public Note addNote(@Valid @RequestBody NoteAddRequest noteAddRequest) {
         return noteService.addNote(noteAddRequest);
     }
 }

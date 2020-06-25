@@ -3,7 +3,7 @@ package com.koulgar.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koulgar.Config.MessageSourceTestConfiguration;
 import com.koulgar.Model.Note.NoteAddRequest;
-import com.koulgar.Model.Note.NoteAddResponse;
+import com.koulgar.Domain.Note;
 import com.koulgar.Service.NoteService;
 import com.koulgar.Utils.Clock;
 import org.junit.Test;
@@ -56,7 +56,7 @@ public class NoteControllerTest {
                 .userId("123asd")
                 .build();
 
-        NoteAddResponse noteAddResponse = NoteAddResponse.builder()
+        Note note = Note.builder()
                 .id("123123123123")
                 .content("Note item")
                 .isCompleted(false)
@@ -64,7 +64,7 @@ public class NoteControllerTest {
                 .updatedDateTime(Clock.now())
                 .build();
 
-        when(noteService.addNote(noteAddRequestArgumentCaptor.capture())).thenReturn(noteAddResponse);
+        when(noteService.addNote(noteAddRequestArgumentCaptor.capture())).thenReturn(note);
 
         //when
         ResultActions response = mockMvc.perform(post("/notes/add-note")
