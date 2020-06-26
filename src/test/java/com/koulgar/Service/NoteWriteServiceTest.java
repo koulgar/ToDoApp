@@ -25,10 +25,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-public class NoteServiceTest {
+public class NoteWriteServiceTest {
 
     @InjectMocks
-    private NoteService noteService;
+    private NoteWriteService noteWriteService;
 
     @Mock
     private UserRepository userRepository;
@@ -56,11 +56,11 @@ public class NoteServiceTest {
 
         User user = User.builder().notes(new ArrayList<>()).build();
 
-        when(userRepository.getUserById(noteAddRequest.getUserId())).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findById(noteAddRequest.getUserId())).thenReturn(Optional.ofNullable(user));
         when(noteConverter.convert(noteAddRequest.getContent())).thenReturn(note);
 
         //when
-        Note noteResponse = noteService.addNote(noteAddRequest);
+        Note noteResponse = noteWriteService.addNote(noteAddRequest);
 
         //then
         verify(userRepository).save(Objects.requireNonNull(user));
@@ -74,13 +74,13 @@ public class NoteServiceTest {
         //given
         NoteAddRequest noteAddRequest = NoteAddRequest.builder().build();
 
-        when(userRepository.getUserById(noteAddRequest.getUserId())).thenReturn(Optional.empty());
+        when(userRepository.findById(noteAddRequest.getUserId())).thenReturn(Optional.empty());
 
         //when
-        Throwable throwable = catchThrowable(() -> noteService.addNote(noteAddRequest));
+        Throwable throwable = catchThrowable(() -> noteWriteService.addNote(noteAddRequest));
 
         //then
-        verify(userRepository).getUserById(noteAddRequest.getUserId());
+        verify(userRepository).findById(noteAddRequest.getUserId());
         assertThat(throwable).isInstanceOf(UserNotFoundException.class);
         assertThat(throwable.getMessage()).isEqualTo("Kullanici mevcut degil.");
         verifyNoMoreInteractions(userRepository);

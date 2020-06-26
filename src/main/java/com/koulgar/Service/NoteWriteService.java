@@ -13,17 +13,18 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NoteService {
+public class NoteWriteService {
 
     private final UserRepository userRepository;
     private final NoteConverter noteConverter;
 
     public Note addNote(NoteAddRequest noteAddRequest) {
-        User user = userRepository.getUserById(noteAddRequest.getUserId())
+        User user = userRepository.findById(noteAddRequest.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("Kullanici mevcut degil."));
         Note newNote = noteConverter.convert(noteAddRequest.getContent());
         addNoteToUser(user, newNote);
         userRepository.save(user);
+        System.out.println(user.getNotes().get(0));
         return newNote;
     }
 

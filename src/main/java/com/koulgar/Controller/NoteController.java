@@ -2,7 +2,7 @@ package com.koulgar.Controller;
 
 import com.koulgar.Model.Note.NoteAddRequest;
 import com.koulgar.Domain.Note;
-import com.koulgar.Service.NoteService;
+import com.koulgar.Service.NoteWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +18,11 @@ import javax.validation.Valid;
 @RequestMapping("notes")
 public class NoteController {
 
-    private final NoteService noteService;
+    private final NoteWriteService noteWriteService;
 
     @PostMapping("/add-note")
     @ResponseStatus(HttpStatus.CREATED)
     public Note addNote(@Valid @RequestBody NoteAddRequest noteAddRequest) {
-        return noteService.addNote(noteAddRequest);
+        return noteWriteService.addNote(noteAddRequest);
     }
 }
