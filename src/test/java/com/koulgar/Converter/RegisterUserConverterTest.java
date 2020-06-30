@@ -32,7 +32,6 @@ public class RegisterUserConverterTest {
         //then
         assertThat(user.getUsername()).isEqualTo("koulgar");
         assertThat(user.getPassword()).isEqualTo("123456");
-        assertThat(user.getNotes()).isNull();
         assertThat(user.getCreatedDateTime()).isEqualTo(Clock.now());
         Clock.unfreeze();
     }

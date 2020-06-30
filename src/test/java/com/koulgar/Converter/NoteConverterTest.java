@@ -20,13 +20,14 @@ public class NoteConverterTest {
     public void it_should_convert_noteAddRequest_to_note() {
         Clock.freeze();
         //given
-        NoteAddRequest noteAddRequest = NoteAddRequest.builder().content("test note").build();
+        NoteAddRequest noteAddRequest = NoteAddRequest.builder().userId("123123").content("test note").build();
 
         //when
-        Note note = noteConverter.convert(noteAddRequest.getContent());
+        Note note = noteConverter.convert(noteAddRequest);
 
         //then
         assertThat(note.getId()).isNotNull();
+        assertThat(note.getOwnerId()).isEqualTo("123123");
         assertThat(note.getContent()).isEqualTo("test note");
         assertThat(note.getIsCompleted()).isEqualTo(false);
         assertThat(note.getCreatedDateTime()).isEqualTo(Clock.now());

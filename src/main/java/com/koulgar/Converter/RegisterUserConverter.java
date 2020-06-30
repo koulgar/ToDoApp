@@ -12,7 +12,6 @@ public class RegisterUserConverter {
         return User.builder()
                 .username(userRegisterModel.getUsername())
                 .password(userRegisterModel.getPassword())
-                .notes(null)
                 .createdDateTime(Clock.now())
                 .build();
     }

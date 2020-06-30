@@ -24,7 +24,6 @@ public class LoginResponseConverterTest {
                 .id("123456")
                 .username("koulgar")
                 .password("123456")
-                .notes(null)
                 .createdDateTime(Clock.now())
                 .build();
 
@@ -35,7 +34,6 @@ public class LoginResponseConverterTest {
         assertThat(userDto.getId()).isEqualTo(user.getId());
         assertThat(userDto.getUsername()).isEqualTo(user.getUsername());
         assertThat(userDto.getCreatedDateTime()).isEqualTo(user.getCreatedDateTime());
-        assertThat(userDto.getNotes()).isEqualTo(user.getNotes());
         Clock.unfreeze();
     }
 }

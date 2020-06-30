@@ -12,7 +12,6 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Document
 @Getter
@@ -31,9 +30,6 @@ public class User {
 
     @Field
     private String password;
-
-    @Field
-    private List<Note> notes;
 
     @Field
     private LocalDateTime createdDateTime;

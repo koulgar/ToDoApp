@@ -11,7 +11,6 @@ public class LoginResponseConverter {
         return UserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .notes(user.getNotes())
                 .createdDateTime(user.getCreatedDateTime())
                 .build();
     }

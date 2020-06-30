@@ -7,6 +7,7 @@ import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepos
 @Configuration
 @EnableCouchbaseRepositories(basePackages={"com.koulgar"})
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
+
     @Override
     public String getConnectionString() {
         return "127.0.0.1";
@@ -24,7 +25,7 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     public String getBucketName() {
-        return "myItems";
+        return "items";
     }
 
 }

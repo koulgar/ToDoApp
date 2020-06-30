@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koulgar.Config.MessageSourceTestConfiguration;
 import com.koulgar.Model.Note.NoteAddRequest;
 import com.koulgar.Domain.Note;
-import com.koulgar.Service.NoteWriteService;
+import com.koulgar.Service.NoteService;
 import com.koulgar.Utils.Clock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class NoteControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private NoteWriteService noteWriteService;
+    private NoteService noteService;
 
     @Captor
     private ArgumentCaptor<NoteAddRequest> noteAddRequestArgumentCaptor;
@@ -64,7 +64,7 @@ public class NoteControllerTest {
                 .updatedDateTime(Clock.now())
                 .build();
 
-        when(noteWriteService.addNote(noteAddRequestArgumentCaptor.capture())).thenReturn(note);
+        when(noteService.addNote(noteAddRequestArgumentCaptor.capture())).thenReturn(note);
 
         //when
         ResultActions response = mockMvc.perform(post("/notes/add-note")
@@ -72,7 +72,7 @@ public class NoteControllerTest {
                 .content(objectMapper.writeValueAsString(noteAddRequest)));
 
         //then
-        verify(noteWriteService).addNote(noteAddRequestArgumentCaptor.capture());
+        verify(noteService).addNote(noteAddRequestArgumentCaptor.capture());
         NoteAddRequest capturedRequest = noteAddRequestArgumentCaptor.getValue();
         assertThat(capturedRequest).isEqualToComparingFieldByField(noteAddRequest);
 
@@ -99,7 +99,7 @@ public class NoteControllerTest {
                 .andExpect(status().isBadRequest());
 
         //then
-        verifyNoInteractions(noteWriteService);
+        verifyNoInteractions(noteService);
         resultActions
                 .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
                 .andExpect(jsonPath("$.errors", containsInAnyOrder(
@@ -124,7 +124,7 @@ public class NoteControllerTest {
                 .andExpect(status().isBadRequest());
 
         //then
-        verifyNoInteractions(noteWriteService);
+        verifyNoInteractions(noteService);
         resultActions
                 .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
                 .andExpect(jsonPath("$.errors", containsInAnyOrder(
