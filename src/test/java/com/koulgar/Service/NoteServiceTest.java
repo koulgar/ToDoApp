@@ -1,6 +1,6 @@
 package com.koulgar.Service;
 
-import com.koulgar.Converter.NoteConverter;
+import com.koulgar.Converter.AddNoteConverter;
 import com.koulgar.Domain.Note;
 import com.koulgar.Model.Note.NoteAddRequest;
 import com.koulgar.Repository.NoteRepository;
@@ -26,7 +26,7 @@ public class NoteServiceTest {
     private NoteRepository noteRepository;
 
     @Mock
-    private NoteConverter noteConverter;
+    private AddNoteConverter addNoteConverter;
 
     @Test
     public void it_should_add_note() {
@@ -46,7 +46,7 @@ public class NoteServiceTest {
                 .updatedDateTime(now)
                 .build();
 
-        when(noteConverter.convert(noteAddRequest)).thenReturn(note);
+        when(addNoteConverter.convert(noteAddRequest)).thenReturn(note);
 
         //when
         noteService.addNote(noteAddRequest);

@@ -1,18 +1,23 @@
 package com.koulgar.Service;
 
 import com.koulgar.Converter.LoginResponseConverter;
+import com.koulgar.Converter.NoteDtoConverter;
 import com.koulgar.Converter.RegisterUserConverter;
+import com.koulgar.Domain.Note;
 import com.koulgar.Domain.User;
 import com.koulgar.Exception.PasswordDoesNotMatchException;
 import com.koulgar.Exception.UserAlreadyExistsException;
 import com.koulgar.Exception.UserNotFoundException;
-import com.koulgar.Model.User.UserLoginRequest;
+import com.koulgar.Model.Note.NoteDto;
 import com.koulgar.Model.User.UserDto;
+import com.koulgar.Model.User.UserLoginRequest;
 import com.koulgar.Model.User.UserRegisterRequest;
+import com.koulgar.Repository.NoteRepository;
 import com.koulgar.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -22,6 +27,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final LoginResponseConverter loginResponseConverter;
     private final RegisterUserConverter registerUserConverter;
+    private final NoteRepository noteRepository;
+    private final NoteDtoConverter noteDtoConverter;
 
     public UserDto userLogin(UserLoginRequest userLoginRequest) {
         User user = userRepository.findByUsernameAndPassword(userLoginRequest.getUsername(), userLoginRequest.getPassword())
@@ -48,4 +55,8 @@ public class UserService {
         }
     }
 
+        public List<NoteDto> getUserNotes(String userId) {
+            List<Note> notes = noteRepository.getNotesByOwnerId(userId);
+            return noteDtoConverter.convertAll(notes);
+    }
 }

@@ -2,10 +2,12 @@ package com.koulgar.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koulgar.Config.MessageSourceTestConfiguration;
-import com.koulgar.Model.User.UserLoginRequest;
+import com.koulgar.Model.Note.NoteDto;
 import com.koulgar.Model.User.UserDto;
+import com.koulgar.Model.User.UserLoginRequest;
 import com.koulgar.Model.User.UserRegisterRequest;
 import com.koulgar.Service.UserService;
+import com.koulgar.Utils.Clock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -19,6 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
@@ -26,6 +31,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,7 +67,7 @@ public class UserControllerTest {
 
 
         //when
-        mockMvc.perform(post("/user/register")
+        mockMvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRegisterRequest)))
                 .andExpect(status().isCreated());
@@ -81,7 +87,7 @@ public class UserControllerTest {
                 .build();
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/user/register")
+        ResultActions resultActions = mockMvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRegisterRequest)))
                 .andExpect(status().isBadRequest());
@@ -113,7 +119,7 @@ public class UserControllerTest {
         when(userService.userLogin(userLoginRequest)).thenReturn(userDto);
 
         //when
-        mockMvc.perform(post("/user/login")
+        mockMvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userLoginRequest)))
                 .andExpect(status().isOk());
@@ -132,7 +138,7 @@ public class UserControllerTest {
                 .build();
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/user/login")
+        ResultActions resultActions = mockMvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userLoginRequest)))
                 .andExpect(status().isBadRequest());
@@ -147,5 +153,35 @@ public class UserControllerTest {
                         "Lutfen 2 ile 15 karakter uzunlugunda kullanici adi girin.",
                         "Lutfen 2 ile 15 karakter uzunlugunda sifre girin.")))
                 .andExpect(jsonPath("$.timestamp", notNullValue()));
+    }
+
+    @Test
+    public void it_should_get_user_notes() throws Exception {
+        Clock.freeze();
+        //given
+        NoteDto noteDto1 = NoteDto.builder()
+                .id("123123")
+                .content("TEST NOTE")
+                .isCompleted(false)
+                .createdDateTime(Clock.now())
+                .updatedDateTime(Clock.now())
+                .build();
+        NoteDto noteDto2 = NoteDto.builder()
+                .id("456456")
+                .content("TEST NOTE")
+                .isCompleted(false)
+                .createdDateTime(Clock.now())
+                .updatedDateTime(Clock.now())
+                .build();
+        List<NoteDto> notes = Arrays.asList(noteDto1, noteDto2);
+        when(userService.getUserNotes("123123")).thenReturn(notes);
+
+        //when
+        ResultActions response = mockMvc.perform(get("/users/123123")).andExpect(status().isOk());
+
+        //then
+        verify(userService).getUserNotes("123123");
+        assertThat(response).isEqualToComparingFieldByField(notes);
+        Clock.unfreeze();
     }
 }

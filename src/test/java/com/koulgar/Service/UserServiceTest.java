@@ -1,14 +1,18 @@
 package com.koulgar.Service;
 
 import com.koulgar.Converter.LoginResponseConverter;
+import com.koulgar.Converter.NoteDtoConverter;
 import com.koulgar.Converter.RegisterUserConverter;
+import com.koulgar.Domain.Note;
 import com.koulgar.Domain.User;
 import com.koulgar.Exception.PasswordDoesNotMatchException;
 import com.koulgar.Exception.UserAlreadyExistsException;
 import com.koulgar.Exception.UserNotFoundException;
+import com.koulgar.Model.Note.NoteDto;
 import com.koulgar.Model.User.UserDto;
 import com.koulgar.Model.User.UserLoginRequest;
 import com.koulgar.Model.User.UserRegisterRequest;
+import com.koulgar.Repository.NoteRepository;
 import com.koulgar.Repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,6 +46,12 @@ public class UserServiceTest {
 
     @Mock
     private RegisterUserConverter registerUserConverter;
+
+    @Mock
+    private NoteRepository noteRepository;
+
+    @Mock
+    private NoteDtoConverter noteDtoConverter;
 
 
     @Test
@@ -139,5 +151,29 @@ public class UserServiceTest {
         verifyNoInteractions(registerUserConverter);
         assertThat(throwable).isInstanceOf(UserAlreadyExistsException.class);
         assertThat(throwable.getMessage()).isEqualTo("Bu kullanici adi zaten alinmis.");
+    }
+
+    @Test
+    public void it_should_get_user_notes() {
+        Note note1 = Note.builder().id("1").ownerId("a").build();
+        Note note2 = Note.builder().id("2").ownerId("a").build();
+
+        NoteDto noteDto1 = NoteDto.builder().id("1111").build();
+        NoteDto noteDto2 = NoteDto.builder().id("2222").build();
+
+        List<Note> notes = Arrays.asList(note1, note2);
+        List<NoteDto> noteDtoList = Arrays.asList(noteDto1, noteDto2);
+
+        //given
+        when(noteRepository.getNotesByOwnerId("a")).thenReturn(notes);
+        when(noteDtoConverter.convertAll(notes)).thenReturn(noteDtoList);
+
+        //when
+        List<NoteDto> notesList = userService.getUserNotes("a");
+
+        //then
+        verify(noteRepository).getNotesByOwnerId("a");
+        verify(noteDtoConverter).convertAll(notes);
+        assertThat(notesList).isEqualTo(noteDtoList);
     }
 }

@@ -1,6 +1,6 @@
 package com.koulgar.Service;
 
-import com.koulgar.Converter.NoteConverter;
+import com.koulgar.Converter.AddNoteConverter;
 import com.koulgar.Domain.Note;
 import com.koulgar.Model.Note.NoteAddRequest;
 import com.koulgar.Repository.NoteRepository;
@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NoteService {
 
-    private final NoteConverter noteConverter;
+    private final AddNoteConverter addNoteConverter;
     private final NoteRepository noteRepository;
 
     @Transactional
     public Note addNote(NoteAddRequest noteAddRequest) {
-        Note newNote = noteConverter.convert(noteAddRequest);
+        Note newNote = addNoteConverter.convert(noteAddRequest);
         return noteRepository.save(newNote);
     }
 

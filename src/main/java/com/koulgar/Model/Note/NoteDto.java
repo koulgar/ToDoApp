@@ -1,4 +1,4 @@
-package com.koulgar.Model.User;
+package com.koulgar.Model.Note;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class NoteDto {
     private String id;
-    private String username;
+    private String content;
+    private Boolean isCompleted;
     private LocalDateTime createdDateTime;
+    private LocalDateTime updatedDateTime;
 }
-
