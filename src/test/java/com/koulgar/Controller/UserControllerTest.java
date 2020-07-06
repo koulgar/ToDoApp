@@ -166,6 +166,7 @@ public class UserControllerTest {
                 .createdDateTime(Clock.now())
                 .updatedDateTime(Clock.now())
                 .build();
+
         NoteDto noteDto2 = NoteDto.builder()
                 .id("456456")
                 .content("TEST NOTE")
@@ -173,11 +174,12 @@ public class UserControllerTest {
                 .createdDateTime(Clock.now())
                 .updatedDateTime(Clock.now())
                 .build();
+
         List<NoteDto> notes = Arrays.asList(noteDto1, noteDto2);
         when(userService.getUserNotes("123123")).thenReturn(notes);
 
         //when
-        ResultActions response = mockMvc.perform(get("/users/123123")).andExpect(status().isOk());
+        ResultActions response = mockMvc.perform(get("/users/user/notes/123123")).andExpect(status().isOk());
 
         //then
         verify(userService).getUserNotes("123123");

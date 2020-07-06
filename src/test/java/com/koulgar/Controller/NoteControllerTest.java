@@ -2,8 +2,9 @@ package com.koulgar.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koulgar.Config.MessageSourceTestConfiguration;
-import com.koulgar.Model.Note.NoteAddRequest;
 import com.koulgar.Domain.Note;
+import com.koulgar.Model.Note.NoteAddRequest;
+import com.koulgar.Model.Note.NoteEditRequest;
 import com.koulgar.Service.NoteService;
 import com.koulgar.Utils.Clock;
 import org.junit.Test;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +45,9 @@ public class NoteControllerTest {
 
     @Captor
     private ArgumentCaptor<NoteAddRequest> noteAddRequestArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<NoteEditRequest> noteEditRequestArgumentCaptor;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -129,6 +134,58 @@ public class NoteControllerTest {
                 .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
                 .andExpect(jsonPath("$.errors", containsInAnyOrder(
                         "Kullanici idsi bos olamaz.",
+                        "Not uzunlugu 150 karakteri asamaz.")))
+                .andExpect(jsonPath("$.timestamp", notNullValue()));
+    }
+
+    @Test
+    public void it_should_edit_note() throws Exception {
+        //given
+        NoteEditRequest noteEditRequest = NoteEditRequest.builder()
+                .content("Note item")
+                .noteId("321321")
+                .isCompleted(false)
+                .currentUserId("123123")
+                .build();
+
+        //when
+        mockMvc.perform(put("/notes/edit-note")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(noteEditRequest)))
+                .andExpect(status().isOk());
+
+        //then
+        verify(noteService).editNote(noteEditRequestArgumentCaptor.capture());
+        NoteEditRequest capturedRequest = noteEditRequestArgumentCaptor.getValue();
+        assertThat(capturedRequest).isEqualToComparingFieldByField(noteEditRequest);
+
+    }
+
+    @Test
+    public void it_should_throw_exception_when_editing_note_max_lenght_not_valid() throws Exception {
+        NoteEditRequest noteEditRequest = NoteEditRequest.builder()
+                .content("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
+                        "enean commodo ligula eget dolor. " +
+                        "Aenean massa. Cum sociis natoque penatibus et magnis dis po.")
+                .noteId("")
+                .isCompleted(null)
+                .currentUserId("")
+                .build();
+
+        //when
+        ResultActions resultActions = mockMvc.perform(put("/notes/edit-note")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(noteEditRequest)))
+                .andExpect(status().isBadRequest());
+
+        //then
+        verifyNoInteractions(noteService);
+        resultActions
+                .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
+                .andExpect(jsonPath("$.errors", containsInAnyOrder(
+                        "Kullanici idsi bos olamaz.",
+                        "Not idsi bos olamaz.",
+                        "Not statusu bos olamaz.",
                         "Not uzunlugu 150 karakteri asamaz.")))
                 .andExpect(jsonPath("$.timestamp", notNullValue()));
     }

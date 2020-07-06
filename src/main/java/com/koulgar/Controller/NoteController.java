@@ -1,11 +1,13 @@
 package com.koulgar.Controller;
 
-import com.koulgar.Model.Note.NoteAddRequest;
 import com.koulgar.Domain.Note;
+import com.koulgar.Model.Note.NoteAddRequest;
+import com.koulgar.Model.Note.NoteEditRequest;
 import com.koulgar.Service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,10 +28,14 @@ public class NoteController {
         return noteService.addNote(noteAddRequest);
     }
 
+    @PutMapping("/edit-note")
+    @ResponseStatus(HttpStatus.OK)
+    public void editNote(@Valid @RequestBody NoteEditRequest noteEditRequest) {
+        noteService.editNote(noteEditRequest);
+    }
+
     /*
     TODO
-        - Get notes by userId
-        - Edit notes by noteId
         - Update note status by noteId
         - Delete note by note Id
      */

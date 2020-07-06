@@ -10,4 +10,5 @@ import java.util.List;
 public interface NoteRepository extends CrudRepository<Note, String> {
 
     List<Note> getNotesByOwnerId(String userId);
+
 }
