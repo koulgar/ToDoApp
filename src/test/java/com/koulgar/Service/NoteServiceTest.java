@@ -5,6 +5,7 @@ import com.koulgar.Domain.Note;
 import com.koulgar.Exception.NoteNotFoundException;
 import com.koulgar.Exception.UserDoesNotHavePermission;
 import com.koulgar.Model.Note.NoteAddRequest;
+import com.koulgar.Model.Note.NoteDeleteRequest;
 import com.koulgar.Model.Note.NoteEditRequest;
 import com.koulgar.Repository.NoteRepository;
 import com.koulgar.Utils.Clock;
@@ -163,6 +164,86 @@ public class NoteServiceTest {
 
         //then
         verify(noteRepository).findById(noteEditRequest.getNoteId());
+        verifyNoMoreInteractions(noteRepository);
+        assertThat(throwable).isInstanceOf(NoteNotFoundException.class);
+        assertThat(throwable.getMessage()).isEqualTo("Not bulunamadi.");
+        Clock.unfreeze();
+    }
+
+    @Test
+    public void it_should_delete_note() {
+        Clock.freeze();
+        //given
+        NoteDeleteRequest noteDeleteRequest = NoteDeleteRequest.builder()
+                .noteId("123123")
+                .currentUserId("321321")
+                .build();
+
+        Note note = Note.builder()
+                .id("123123")
+                .ownerId("321321")
+                .isCompleted(false)
+                .createdDateTime(Clock.now())
+                .updatedDateTime(Clock.now())
+                .build();
+
+        when(noteRepository.findById(noteDeleteRequest.getNoteId())).thenReturn(java.util.Optional.ofNullable(note));
+
+        //when
+        noteService.deleteNote(noteDeleteRequest);
+
+        //then
+        verify(noteRepository).deleteById(noteDeleteRequest.getNoteId());
+    }
+
+    @Test
+    public void it_should_throw_exception_when_deleting_note_if_note_owner_id_does_not_match() {
+        Clock.freeze();
+        LocalDateTime now = Clock.now();
+        //given
+        NoteDeleteRequest noteDeleteRequest = NoteDeleteRequest.builder()
+                .noteId("123123")
+                .currentUserId("321321")
+                .build();
+
+        Note note = Note.builder()
+                .id("321321")
+                .ownerId("222222")
+                .content("Note content")
+                .isCompleted(false)
+                .createdDateTime(now)
+                .updatedDateTime(now)
+                .build();
+
+        when(noteRepository.findById(noteDeleteRequest.getNoteId())).thenReturn(java.util.Optional.ofNullable(note));
+
+        //when
+        Throwable throwable = catchThrowable(() -> noteService.deleteNote(noteDeleteRequest));
+
+        //then
+        verify(noteRepository).findById(noteDeleteRequest.getNoteId());
+        verifyNoMoreInteractions(noteRepository);
+        assertThat(throwable).isInstanceOf(UserDoesNotHavePermission.class);
+        assertThat(throwable.getMessage()).isEqualTo("Bu notu duzenleme yetkiniz bulunmamaktadir.");
+        Clock.unfreeze();
+    }
+
+    @Test
+    public void it_should_throw_exception_when_deleting_note_if_note_id_is_not_valid() {
+        Clock.freeze();
+        //given
+        NoteDeleteRequest noteDeleteRequest = NoteDeleteRequest.builder()
+                .noteId("123123")
+                .currentUserId("321321")
+                .build();
+
+        when(noteRepository.findById(noteDeleteRequest.getNoteId())).thenReturn(java.util.Optional.empty());
+
+        //when
+        Throwable throwable = catchThrowable(() -> noteService.deleteNote(noteDeleteRequest));
+
+        //then
+        verify(noteRepository).findById(noteDeleteRequest.getNoteId());
         verifyNoMoreInteractions(noteRepository);
         assertThat(throwable).isInstanceOf(NoteNotFoundException.class);
         assertThat(throwable.getMessage()).isEqualTo("Not bulunamadi.");

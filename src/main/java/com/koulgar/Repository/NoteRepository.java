@@ -11,4 +11,5 @@ public interface NoteRepository extends CrudRepository<Note, String> {
 
     List<Note> getNotesByOwnerId(String userId);
 
+    void deleteById(String noteId);
 }

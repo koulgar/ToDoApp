@@ -5,6 +5,7 @@ import com.koulgar.Domain.Note;
 import com.koulgar.Exception.NoteNotFoundException;
 import com.koulgar.Exception.UserDoesNotHavePermission;
 import com.koulgar.Model.Note.NoteAddRequest;
+import com.koulgar.Model.Note.NoteDeleteRequest;
 import com.koulgar.Model.Note.NoteEditRequest;
 import com.koulgar.Repository.NoteRepository;
 import com.koulgar.Utils.Clock;
@@ -39,5 +40,13 @@ public class NoteService {
         note.setIsCompleted(noteEditRequest.getIsCompleted());
         note.setUpdatedDateTime(Clock.now());
         return note;
+    }
+
+    public void deleteNote(NoteDeleteRequest noteDeleteRequest) {
+        Note note = noteRepository.findById(noteDeleteRequest.getNoteId()).orElseThrow(() -> new NoteNotFoundException("Not bulunamadi."));
+        if (!note.getOwnerId().equals(noteDeleteRequest.getCurrentUserId())) {
+            throw new UserDoesNotHavePermission("Bu notu duzenleme yetkiniz bulunmamaktadir.");
+        }
+        noteRepository.deleteById(noteDeleteRequest.getNoteId());
     }
 }

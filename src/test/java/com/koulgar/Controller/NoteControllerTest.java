@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koulgar.Config.MessageSourceTestConfiguration;
 import com.koulgar.Domain.Note;
 import com.koulgar.Model.Note.NoteAddRequest;
+import com.koulgar.Model.Note.NoteDeleteRequest;
 import com.koulgar.Model.Note.NoteEditRequest;
 import com.koulgar.Service.NoteService;
 import com.koulgar.Utils.Clock;
@@ -27,6 +28,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -48,6 +50,9 @@ public class NoteControllerTest {
 
     @Captor
     private ArgumentCaptor<NoteEditRequest> noteEditRequestArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<NoteDeleteRequest> noteDeleteRequestArgumentCaptor;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -187,6 +192,50 @@ public class NoteControllerTest {
                         "Not idsi bos olamaz.",
                         "Not statusu bos olamaz.",
                         "Not uzunlugu 150 karakteri asamaz.")))
+                .andExpect(jsonPath("$.timestamp", notNullValue()));
+    }
+
+    @Test
+    public void it_should_delete_note() throws Exception {
+        //given
+        NoteDeleteRequest noteDeleteRequest = NoteDeleteRequest.builder()
+                .noteId("321321")
+                .currentUserId("123123")
+                .build();
+
+        //when
+        mockMvc.perform(delete("/notes/delete-note")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(noteDeleteRequest)))
+                .andExpect(status().isOk());
+
+        //then
+        verify(noteService).deleteNote(noteDeleteRequestArgumentCaptor.capture());
+        NoteDeleteRequest capturedRequest = noteDeleteRequestArgumentCaptor.getValue();
+        assertThat(capturedRequest).isEqualToComparingFieldByField(noteDeleteRequest);
+
+    }
+
+    @Test
+    public void it_should_throw_exception_when_deleting_note_with_invalid_user_or_note_id() throws Exception {
+        NoteDeleteRequest noteDeleteRequest = NoteDeleteRequest.builder()
+                .noteId("")
+                .currentUserId("")
+                .build();
+
+        //when
+        ResultActions resultActions = mockMvc.perform(delete("/notes/delete-note")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(noteDeleteRequest)))
+                .andExpect(status().isBadRequest());
+
+        //then
+        verifyNoInteractions(noteService);
+        resultActions
+                .andExpect(jsonPath("$.exception", is("MethodArgumentNotValidException")))
+                .andExpect(jsonPath("$.errors", containsInAnyOrder(
+                        "Kullanici idsi bos olamaz.",
+                        "Not idsi bos olamaz.")))
                 .andExpect(jsonPath("$.timestamp", notNullValue()));
     }
 }

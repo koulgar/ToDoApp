@@ -2,10 +2,12 @@ package com.koulgar.Controller;
 
 import com.koulgar.Domain.Note;
 import com.koulgar.Model.Note.NoteAddRequest;
+import com.koulgar.Model.Note.NoteDeleteRequest;
 import com.koulgar.Model.Note.NoteEditRequest;
 import com.koulgar.Service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,10 +36,10 @@ public class NoteController {
         noteService.editNote(noteEditRequest);
     }
 
-    /*
-    TODO
-        - Update note status by noteId
-        - Delete note by note Id
-     */
+    @DeleteMapping("/delete-note")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteNote(@Valid @RequestBody NoteDeleteRequest noteDeleteRequest) {
+        noteService.deleteNote(noteDeleteRequest);
+    }
 
 }
