@@ -40,7 +40,6 @@ public class NoteController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteNote(@Valid @RequestBody NoteDeleteRequest noteDeleteRequest) {
         noteService.deleteNote(noteDeleteRequest);
-        System.out.println('asldjalsdlk');
     }
 
 }
